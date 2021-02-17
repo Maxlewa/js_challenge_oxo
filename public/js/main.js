@@ -15,9 +15,10 @@
 // 1 5 9 // 0 4 8
 // 3 5 7 // 2 4 6
 
-const X_CLASS = 'x'
-const CIRCLE_CLASS = 'circle'
-const WINNING_COMBINATIONS = [
+// création des const et tableaux gagnants
+const X = 'x'
+const Cercle = 'cercle'
+const ValeurGagant = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -27,80 +28,87 @@ const WINNING_COMBINATIONS = [
   [0, 4, 8],
   [2, 4, 6]
 ]
-const cellElements = document.querySelectorAll('[data-cell]')
+const petitCarreElement = document.querySelectorAll('[data-petit-carre]')
 const board = document.getElementById('board')
-const winningMessageElement = document.getElementById('winningMessage')
+const MessageGagnant = document.getElementById('Message-gagnant')
 const restartButton = document.getElementById('restartButton')
-const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
+const messageGagnantTexteElement = document.querySelector('[data-message-gagnant-texte]')
 let circleTurn
+// circleTurn permet de passer d'un tour à un autre
 
-startGame()
+debutJeu()
 
-restartButton.addEventListener('click', startGame)
+restartButton.addEventListener('click', debutJeu)
 
-function startGame() {
+// fonction pour commencer le jeu
+function debutJeu() { 
   circleTurn = false
-  cellElements.forEach(cell => {
-    cell.classList.remove(X_CLASS)
-    cell.classList.remove(CIRCLE_CLASS)
-    cell.removeEventListener('click', handleClick)
-    cell.addEventListener('click', handleClick, { once: true })
+  petitCarreElement.forEach(petitCarre => {
+    petitCarre.classList.remove(X)
+    petitCarre.classList.remove(Cercle)
+    petitCarre.removeEventListener('click', handleClick)
+    petitCarre.addEventListener('click', handleClick, { once: true })
   })
-  setBoardHoverClass()
-  winningMessageElement.classList.remove('show')
+  hoverClass()
+  MessageGagnant.classList.remove('show')
 }
 
 function handleClick(e) {
   const cell = e.target
-  const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS
+  const currentClass = circleTurn ? Cercle : X
   placeMark(cell, currentClass)
-  if (checkWin(currentClass)) {
-    endGame(false)
+  if (checkGagnant(currentClass)) {
+    finGame(false)
   } else if (isDraw()) {
-    endGame(true)
+    finGame(true)
   } else {
-    swapTurns()
-    setBoardHoverClass()
+    nouveauTours()
+    hoverClass()
   }
 }
 
-function endGame(draw) {
+// match nul
+function finGame(draw) {
   if (draw) {
-    winningMessageTextElement.innerText = 'Draw!'
+    messageGagnantTexteElement.innerText = 'Match nul !'
+    // s'il y a un gagnant
   } else {
-    winningMessageTextElement.innerText = `${circleTurn ? "O's" : "X's"} Wins!`
+    messageGagnantTexteElement.innerText = `Le joueur ${circleTurn ? "O" : "X"} a gagné !`
   }
-  winningMessageElement.classList.add('show')
+  MessageGagnant.classList.add('show')
 }
 
+// 
 function isDraw() {
-  return [...cellElements].every(cell => {
-    return cell.classList.contains(X_CLASS) || cell.classList.contains(CIRCLE_CLASS)
+  return [...petitCarreElement].every(cell => {
+    return cell.classList.contains(X) || cell.classList.contains(Cercle)
   })
 }
 
+// place le contenu de la const x ou cercle 
 function placeMark(cell, currentClass) {
   cell.classList.add(currentClass)
 }
 
-function swapTurns() {
+// change de tour
+function nouveauTours() {
   circleTurn = !circleTurn
 }
-
-function setBoardHoverClass() {
-  board.classList.remove(X_CLASS)
-  board.classList.remove(CIRCLE_CLASS)
+// function pour mettre un hover sur nos class x et cercle
+function hoverClass() {
+  board.classList.remove(X)
+  board.classList.remove(Cercle)
   if (circleTurn) {
-    board.classList.add(CIRCLE_CLASS)
+    board.classList.add(Cercle)
   } else {
-    board.classList.add(X_CLASS)
+    board.classList.add(X)
   }
 }
-
-function checkWin(currentClass) {
-  return WINNING_COMBINATIONS.some(combination => {
+// function pour check le gagnant
+function checkGagnant(currentClass) {
+  return ValeurGagant.some(combination => {
     return combination.every(index => {
-      return cellElements[index].classList.contains(currentClass)
+      return petitCarreElement[index].classList.contains(currentClass)
     })
   })
 }
