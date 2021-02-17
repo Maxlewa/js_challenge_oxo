@@ -1,17 +1,21 @@
 body {
     margin: 0;
-  }
+}
 
+/* titre */
 #titre {
     margin-bottom: 40px;
     text-align: center;
+    margin-top: 40px;
 }
-  
+
+/* taille globale de la grille */
 :root {
     --cell-size: 100px;
     --mark-size: calc(var(--cell-size) * .9);
 }
 
+/* grille */
 .carre {
     width: 100vw;
     height: 40vh;
@@ -21,6 +25,7 @@ body {
     grid-template-columns: repeat(3, auto);
 }
 
+/* chaque petit carré */
 .petitCarre {
     width: var(--cell-size);
     height: var(--cell-size);
@@ -44,19 +49,21 @@ body {
     background-color: black;
 }
 
+/* avant de cliquer */
 .carre.x .petitCarre:not(.x):not(.cercle):hover::before,
 .carre.x .petitCarre:not(.x):not(.cercle):hover::after,
 .carre.cercle .petitCarre:not(.x):not(.cercle):hover::before {
     background-color: red;
 }
 
+/* X */
 .petitCarre.x::before,
 .petitCarre.x::after,
 .carre.x .petitCarre:not(.x):not(.cercle):hover::before,
 .carre.x .petitCarre:not(.x):not(.cercle):hover::after {
     content: '';
     position: absolute;
-    width: calc(var(--mark-size) * .15);
+    width: calc(var(--mark-size) * .18);
     height: var(--mark-size);
 }
 
@@ -70,6 +77,7 @@ body {
     transform: rotate(-45deg);
 }
 
+/* Cercle */
 .petitCarre.cercle::before,
 .petitCarre.cercle::after,
 .carre.cercle .petitCarre:not(.x):not(.cercle):hover::before,
@@ -92,6 +100,7 @@ body {
     background-color: white;
 }
 
+/* message de fin */
 .Message-gagnant {
     display: none;
     position: fixed;
@@ -107,6 +116,11 @@ body {
     flex-direction: column;
 }
 
+.Message-gagnant.show {
+    display: flex;
+}
+
+/* bouton nouvelle partie */
 .Message-gagnant button {
     font-size: 3rem;
     background-color: white;
@@ -121,8 +135,4 @@ body {
     background-color: green;
     color: white;
     border-color: white;
-}
-
-.Message-gagnant.show {
-    display: flex;
 }
